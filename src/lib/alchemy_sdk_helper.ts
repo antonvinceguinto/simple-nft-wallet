@@ -4,7 +4,7 @@ import { Chain } from 'wagmi';
 const alchemy = (network: Chain) => {
   let filteredNetwork: Network = Network.ETH_MAINNET;
 
-  switch (network.id) {
+  switch (network?.id) {
     case 1:
       filteredNetwork = Network.ETH_MAINNET;
       break;

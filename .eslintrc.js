@@ -1,7 +1,5 @@
 module.exports = {
   extends: [
-    // 'next/core-web-vitals',
-    // 'airbnb',
     'airbnb-typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',

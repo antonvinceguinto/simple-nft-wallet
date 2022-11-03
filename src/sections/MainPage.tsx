@@ -39,28 +39,44 @@ function MainPage() {
   const { address } = useAccount();
 
   useEffect(() => {
-    const fetchNfts = async () =>
-      alchemy(chain)
-        .nft.getNftsForOwner(address, {
-          excludeFilters: [NftExcludeFilters.SPAM, NftExcludeFilters.AIRDROPS],
-          // TODO: Add pagination, currently only returns 100.
-          // DOC: https://docs.alchemy.com/reference/sdk-getnfts
-          //   pageSize: 10,
-        })
-        .then((nfts) => {
-          console.log(nfts);
-          setMyNFTs(nfts.ownedNfts);
-          setLoadingStatus('success');
-        });
+    if (chain !== undefined) {
+      const fetchNfts = async () =>
+        alchemy(chain)
+          .nft.getNftsForOwner(address, {
+            excludeFilters: [
+              NftExcludeFilters.SPAM,
+              NftExcludeFilters.AIRDROPS,
+            ],
+            // TODO: Add pagination, currently only returns 100.
+            // DOC: https://docs.alchemy.com/reference/sdk-getnfts
+            //   pageSize: 10,
+          })
+          .then((nfts) => {
+            console.log(nfts);
+            setMyNFTs(nfts.ownedNfts);
+            setLoadingStatus('success');
+          });
 
-    try {
-      setLoadingStatus('loading');
-      void fetchNfts();
-    } catch (e) {
-      setLoadingStatus('error');
-      console.error('Error fetching NFTs', e);
+      try {
+        setLoadingStatus('loading');
+        void fetchNfts();
+      } catch (e) {
+        setLoadingStatus('error');
+        console.error('Error fetching NFTs', e);
+      }
     }
   }, [chain]);
+
+  if (chain === undefined) {
+    return (
+      <div className=''>
+        <div className='min-h-screen centered'>
+          <h1>Please make sure your wallet is connected 😤</h1>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <section id='main' className='min-h-screen relative'>
@@ -78,6 +94,8 @@ function MainPage() {
           <div className='flex justify-center items-center min-h-screen'>
             Sorry we had trouble retrieving your NFTs 🙁
           </div>
+        ) : myNFTs.length === 0 ? (
+          <h1 className='min-h-screen centered'>You have no NFTs 🥹</h1>
         ) : (
           <div
             className='grid grid-cols-2 px-2 md:grid-cols-3 
