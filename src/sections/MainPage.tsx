@@ -43,6 +43,8 @@ function MainPage() {
       alchemy(chain)
         .nft.getNftsForOwner(address, {
           excludeFilters: [NftExcludeFilters.SPAM, NftExcludeFilters.AIRDROPS],
+          // TODO: Add pagination, currently only returns 100.
+          // DOC: https://docs.alchemy.com/reference/sdk-getnfts
           //   pageSize: 10,
         })
         .then((nfts) => {
